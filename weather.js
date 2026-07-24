@@ -1,3 +1,5 @@
+let weatherContext = "";
+
 async function getWeather() {
     const city = document.getElementById('city').value;
     const errorMsg = document.getElementById('error-message');
@@ -37,6 +39,9 @@ async function getWeather() {
 
         const currentIcon = currentData.weather[0].icon;
         document.querySelector('.current-weather .icon').innerHTML = `<img src="https://openweathermap.org/img/wn/${currentIcon}@2x.png" alt="weather icon">`;
+
+        // Save context for AI
+        weatherContext = `In ${currentData.name}, it's ${currentData.main.temp}°C and ${currentData.weather[0].description}. Humidity is ${currentData.main.humidity}%.`;
 
         // Change background
         const weatherCondition = currentData.weather[0].main.toLowerCase();
@@ -124,4 +129,43 @@ function changeBackground(condition) {
             break;
     }
     console.log(`Background class applied: ${body.className}`);
+}
+
+async function askAI() {
+    const input = document.getElementById('ai-input');
+    const chat = document.getElementById('chat-window');
+    const question = input.value.trim();
+    
+    if (!question || !weatherContext) {
+        chat.innerHTML += `<div style="color: #ff6b6b; margin-top: 5px;">Please search for a city first, then ask a question.</div>`;
+        chat.scrollTop = chat.scrollHeight;
+        return;
+    }
+
+    chat.innerHTML += `<div style="color: #FFD700; margin-top: 5px;">You: ${question}</div>`;
+    input.value = "";
+
+    const GEMINI_KEY = "AIzaSyACGKwusG_9Zy8ss2cSiqL11rVmOQafJEw";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                contents: [{ 
+                    parts: [{ 
+                        text: `Weather: ${weatherContext}. User: ${question}. Short answer please.` 
+                    }] 
+                }] 
+            })
+        });
+        const data = await response.json();
+        const aiText = data.candidates[0].content.parts[0].text;
+        chat.innerHTML += `<div style="margin-top: 5px;">AI: ${aiText}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    } catch (e) {
+        chat.innerHTML += `<div style="color: #ff6b6b;">Error connecting to AI.</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    }
 }

@@ -20,7 +20,7 @@
 
         <div id="error-message" class="error-message"></div>
         <div id="loading" class="loading">Loading weather data...</div>
-        <div class="watermark">By Las Vegas </div>
+        <div class="watermark">By Las Vegas</div>
 
         <div class="weather-container">
             <section class="current-weather">
@@ -58,15 +58,14 @@
                 </div>
             </section>
 
-            <div class="ai-chat-box" style="margin-top: 20px; text-align: left;">
-    <div id="chat-window" style="height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-bottom: 10px; color: white; font-size: 0.9rem;">
-        <div>AI: Search for a city, then ask me a question!</div>
-    </div>
-    <div style="display: flex; gap: 5px;">
-        <input type="text" id="ai-input" placeholder="Ask AI about the weather..." style="flex: 1; padding: 10px; border-radius: 20px; border: none;" onkeypress="if(event.key==='Enter') askAI()">
-        <button onclick="askAI()" style="padding: 10px 20px; background-color: #FFD700; border: none; border-radius: 25px; color: #004d7a; font-weight: bold; cursor: pointer;">Ask AI</button>
-    </div>
-</div>
+            <div class="ai-chat-box">
+                <div id="chat-window">
+                    <div>AI: Search for a city, then ask me a question!</div>
+                </div>
+                <div class="ai-input-container">
+                    <input type="text" id="ai-input" placeholder="Ask AI about the weather..." onkeypress="if(event.key==='Enter') askAI()">
+                    <button onclick="askAI()">Ask AI</button>
+                </div>
             </div>
         </div>
     </div>
