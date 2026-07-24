@@ -1,9 +1,0 @@
-{
-  "name": "weather-explorer",
-  "version": "1.0.0",
-  "description": "Weather Explorer App with AI Chat",
-  "scripts": {
-    "dev": "vercel dev",
-    "deploy": "vercel --prod"
-  }
-}
